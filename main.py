@@ -1,3 +1,39 @@
+from os import replace
+import pandas as pd
+import numpy as np
+import sys
+import warnings
+import math
+from sklearn.utils import shuffle
+import torch
+from torch.autograd import Variable
+from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MultiLabelBinarizer
+from sklearn.metrics import classification_report, confusion_matrix, multilabel_confusion_matrix, f1_score, accuracy_score, precision_recall_fscore_support
+from transformers import AutoModel, AutoTokenizer
+from transformers import AdamW
+from torch.nn import BCEWithLogitsLoss, BCELoss
+from tqdm import tqdm, trange
+from transformers import BertTokenizer
+from transformers import RobertaTokenizer, RobertaForSequenceClassification
+from torch import nn
+import torch.nn.functional as F
+from sklearn.utils.class_weight import compute_class_weight
+if not sys.warnoptions:
+    warnings.simplefilter("ignore") 
+
+def f1_score_func(preds, labels):
+    preds_flat = np.argmax(preds, axis=1).flatten()
+    labels_flat = labels.flatten()
+    return f1_score(labels_flat, preds_flat, average='weighted')
+
+def calculate_accuracy(preds, labels):
+    preds_flat = np.argmax(preds, axis=1).flatten()
+    labels_flat = labels.flatten()
+    n_correct_elems = np.sum(preds_flat == labels_flat)
+    return n_correct_elems / len(labels)
+
 def main():
     fraction = 100
     epochs = 10
