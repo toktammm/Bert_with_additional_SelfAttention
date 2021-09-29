@@ -45,7 +45,7 @@ def main():
     DROPOUT = 0.2
     heads = 8
     pretrained_model_name = "vinai/bertweet-base"
-    data_file = 'twitter_hatespeech_2018.csv'
+    data_file = 'data.csv'
       
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -54,7 +54,6 @@ def main():
         torch.cuda.get_device_name(0)
 
     '''load data'''
-    # df = pd.read_csv('usc_covid_misinfo_BertweetNormalized.csv', index_col=0)
     df = pd.read_csv(data_file)
     df = df.sample(frac=1).reset_index(drop=True)   #shuffle rows    
 
