@@ -1,25 +1,21 @@
-from os import replace
 import pandas as pd
 import numpy as np
 import sys
 import warnings
 import math
-from sklearn.utils import shuffle
 import torch
 from torch.autograd import Variable
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MultiLabelBinarizer
-from sklearn.metrics import classification_report, confusion_matrix, multilabel_confusion_matrix, f1_score, accuracy_score, precision_recall_fscore_support
+from sklearn.metrics import f1_score
 from transformers import AutoModel, AutoTokenizer
 from transformers import AdamW
-from torch.nn import BCEWithLogitsLoss, BCELoss
 from tqdm import tqdm, trange
 from transformers import BertTokenizer
-from transformers import RobertaTokenizer, RobertaForSequenceClassification
+from transformers import RobertaTokenizer
 from torch import nn
 import torch.nn.functional as F
-from sklearn.utils.class_weight import compute_class_weight
+from model import ModelArch
 if not sys.warnoptions:
     warnings.simplefilter("ignore") 
 
@@ -33,6 +29,16 @@ def calculate_accuracy(preds, labels):
     labels_flat = labels.flatten()
     n_correct_elems = np.sum(preds_flat == labels_flat)
     return n_correct_elems / len(labels)
+
+def build_model(device, pretrained_model, heads):
+    model = ModelArch(pretrained_model, heads)
+    n_pretrained_model_pars = len(list(pretrained_model.parameters()))
+
+    if device.type == "cuda":
+        model.cuda()        
+        model.to(device)
+
+    return model, n_pretrained_model_pars
 
 def main():
     fraction = 100
