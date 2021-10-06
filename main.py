@@ -144,7 +144,7 @@ def main():
                     for p, param in enumerate(model.parameters()):
                         if p < n_bert_parameters:
                             param.requires_grad = False     
-                    optimizer = build_optimizer(model)
+                    optimizer = build_optimizer(model, learningrate)
             
             '''Training'''
             '''Set model to training mode'''
