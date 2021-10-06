@@ -32,13 +32,13 @@ def calculate_accuracy(preds, labels):
 
 def build_model(device, pretrained_model, heads):
     model = ModelArch(pretrained_model, heads)
-    n_pretrained_model_pars = len(list(pretrained_model.parameters()))
+    n_pretrained_model_parameters = len(list(pretrained_model.parameters()))
 
     if device.type == "cuda":
         model.cuda()        
         model.to(device)
 
-    return model, n_pretrained_model_pars
+    return model, n_pretrained_model_parameters
 
 def main():
     fraction = 100
@@ -112,7 +112,7 @@ def main():
     for c in range(len(train_inputs_chunks)):
         
         pretrained_model = AutoModel.from_pretrained(pretrained_model_name)   
-        model, n_bert_pars = build_model(device, pretrained_model, heads=heads)
+        model, n_bert_parameters = build_model(device, pretrained_model, heads=heads)
         optimizer = build_optimizer(model, learningrate)
         
         if c > 0:
