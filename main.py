@@ -142,7 +142,7 @@ def main():
                 '''freeze all the parameters except the parameter gradiants for the self-attention layers and classification head'''
                 if freeze:
                     for p, param in enumerate(model.parameters()):
-                        if p < n_bert_pars:
+                        if p < n_bert_parameters:
                             param.requires_grad = False     
                     optimizer = build_optimizer(model)
             
