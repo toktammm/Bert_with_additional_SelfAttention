@@ -100,3 +100,17 @@ def attention(q, k, v, d_k, mask=None, dropout=None):
         
     output = torch.matmul(scores, v)
     return output
+
+
+def build_optimizer(model, learningrate):
+    '''setting custom optimization parameters. You may implement a scheduler here as well'''
+    param_optimizer = list(model.named_parameters())
+    no_decay = ['bias', 'gamma', 'beta']
+    optimizer_grouped_parameters = [
+        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)],
+        'weight_decay_rate': 0.01},
+        {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)],
+        'weight_decay_rate': 0.0}
+    ]
+    optimizer = AdamW(optimizer_grouped_parameters,lr=learningrate,correct_bias=True)
+    return optimizer
